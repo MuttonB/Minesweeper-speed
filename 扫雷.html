@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>扫雷 - 极速版</title>
+    <link rel="icon" href="https://onesquareminesweeper.com/img/minesweeper-icon.png">
+    <style>
+        @media (max-width:530px) {
+            .round {
+                display: none !important;
+            }
+        }
+
+        body {
+            background-color: #f7f0f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .main {
+            width: 200px;
+            height: 280px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            background-color: whitesmoke;
+            border: 4px solid rgb(207, 207, 207);
+            box-shadow: 0 0 12px -6px black;
+        }
+
+        img {
+            image-rendering: pixelated;
+        }
+
+        .header {
+            background: linear-gradient(to right, rgb(11, 36, 106), rgb(166, 202, 240));
+            color: whitesmoke;
+            height: 26px;
+            padding: 0 6px;
+        }
+
+        .header p:nth-child(1) {
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .header p:nth-child(1)>img {
+            margin-right: 10px;
+        }
+
+        .contant {
+            width: 100%;
+            height: 100%;
+            padding: 2px;
+            background-color: #BDBDBD;
+        }
+
+        .setting {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #BDBDBD;
+            padding: 4px 0;
+        }
+
+        .setting,
+        .game {
+            margin: 6px;
+            border: 3px solid gray;
+            border-right: 3px solid gainsboro;
+            border-bottom: 3px solid gainsboro;
+        }
+
+        .time,
+        .point {
+            display: flex;
+            height: 100%;
+            background-color: black;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+        }
+
+        .time p,
+        .point p {
+            height: 30px;
+            display: flex;
+            align-items: center;
+        }
+
+        .time img,
+        .point img {
+            width: 15px;
+        }
+
+        .smile {
+            width: 26px;
+            height: 28px;
+            background: url("https://onesquareminesweeper.com/img/face.png");
+            border: 0;
+            margin: 0 6px;
+        }
+
+        .smile:active {
+            border: 1px solid transparent;
+        }
+
+        .game {
+            height: 182px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .check {
+            height: 16px;
+            width: 16px;
+            border: 0;
+            background: url("https://onesquareminesweeper.com/img/cell-covered.png");
+        }
+
+        .check:active {
+            border: 1px solid transparent;
+        }
+
+        .tip {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: whitesmoke;
+            width: 260px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            position: fixed;
+            left: 0;
+            right: 0;
+            margin: auto;
+            top: 80px;
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="contant">
+            <div class="header">
+                <p><img src="https://onesquareminesweeper.com/img/minesweeper-icon.png" alt="" width="18">扫雷 - 极速版
+                </p>
+            </div>
+            <div class="setting">
+                <div class="point">
+                    <p><img src="https://onesquareminesweeper.com/img/display-digit-0.png" alt=""></p>
+                    <p><img src="https://onesquareminesweeper.com/img/display-digit-0.png" alt=""></p>
+                    <p><img src="https://onesquareminesweeper.com/img/display-digit-1.png" alt=""></p>
+                </div>
+                <button class="smile"></button>
+                <div class="time">
+                    <p><img class="second3" src="https://onesquareminesweeper.com/img/display-digit-0.png" alt=""></p>
+                    <p><img class="second2" src="https://onesquareminesweeper.com/img/display-digit-0.png" alt=""></p>
+                    <p><img class="second" src="https://onesquareminesweeper.com/img/display-digit-0.png" alt=""></p>
+                </div>
+            </div>
+            <div class="game">
+                <button class="check"></button>
+            </div>
+        </div>
+    </div>
+    <div class="round">
+        <img class="move" width="110" height="110" src="https://z1.ax1x.com/2023/09/14/pPR4Jt1.png" alt="">
+    </div>
+    <p class="tip">您花费了<span class="tips"></span>秒,超越了99%的用户</p>
+</body>
+
+<script>
+    var s = 0
+    var s2 = 0
+    var s3 = 0
+    var interval
+    function setTIme() {
+        interval = setInterval(() => {
+            if (s == 10) {
+                s2++
+                s = 0
+                if (s2 == 10) {
+                    s3++
+                    s2 = 0
+                    document.querySelector(".second3").setAttribute("src", "https://onesquareminesweeper.com/img/display-digit-" + s3 + ".png")
+                }
+                document.querySelector(".second2").setAttribute("src", "https://onesquareminesweeper.com/img/display-digit-" + s2 + ".png")
+            }
+            document.querySelector(".second").setAttribute("src", "https://onesquareminesweeper.com/img/display-digit-" + s + ".png")
+            s++
+        }, 1000);
+        setInterval(() => {
+            if (s3 >= 9 && s2 >= 9 && s > 9) {
+                clearInterval(interval)
+            }
+        }, 100);
+    }
+    document.querySelector(".smile").onclick = function () {
+        s = 0
+        s2 = 0
+        s3 = 0
+        document.querySelector(".second").setAttribute("src", "https://onesquareminesweeper.com/img/display-digit-" + s + ".png")
+        document.querySelector(".second2").setAttribute("src", "https://onesquareminesweeper.com/img/display-digit-" + s2 + ".png")
+        document.querySelector(".second3").setAttribute("src", "https://onesquareminesweeper.com/img/display-digit-" + s3 + ".png")
+        this.style.background = 'url("https://onesquareminesweeper.com/img/face.png")'
+        document.querySelector(".check").style.background = 'url("https://onesquareminesweeper.com/img/cell-covered.png")'
+        clearInterval(interval)
+        setTIme()
+    }
+    setTIme()
+    document.querySelector(".check").onclick = function () {
+        this.style.background = 'url("https://onesquareminesweeper.com/img/mine-exploded.png")'
+        document.querySelector(".smile").style.background = 'url("https://onesquareminesweeper.com/img/face-lost.png")'
+        clearInterval(interval)
+        document.querySelector(".tip").style.opacity = 1
+        document.querySelector(".tips").innerHTML = s3 + "" + s2 + "" + s - 1
+        setTimeout(() => {
+            document.querySelector(".tip").style.opacity = 0
+        }, 3500);
+    }
+</script>
+
+</html>
